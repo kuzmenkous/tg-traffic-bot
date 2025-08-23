@@ -2,9 +2,9 @@ services:
   postgresql:
     image: "postgres:latest"
     restart: always
-    container_name: "traffic_bot_app_postgresql"
+    container_name: "traffic_bot_postgresql"
     volumes:
-      - traffic_bot_app_postgresql:/var/lib/postgresql/data
+      - traffic_bot_postgresql:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
@@ -13,6 +13,22 @@ services:
       POSTGRES_PORT: ${DB_PORT}
     env_file:
       - .env
+
+  pg-admin:
+    image: dpage/pgadmin4
+    container_name: traffic_bot_admin
+    restart: always
+    depends_on:
+      - postgresql
+    ports:
+      - "83:80"
+    volumes:
+      - traffic_bot_pg_admin_data:/var/lib/pgadmin
+    env_file:
+      - .env
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "${PG_ADMIN_EMAIL}"
+      PGADMIN_DEFAULT_PASSWORD: "${PG_ADMIN_PASSWORD}"
 
   app:
     build:
@@ -69,5 +85,6 @@ services:
 
 
 volumes:
-  traffic_bot_app_postgresql:
+  traffic_bot_postgresql:
+  traffic_bot_pg_admin_data:
   traffic_bot_app_redis:

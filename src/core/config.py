@@ -39,7 +39,7 @@ class RedisSettings(BaseSettings, env_prefix="redis_"):
     password: str
 
     @property
-    def url(self) -> RedisDsn:
+    def url(self) -> str:
         return str(
             RedisDsn.build(
                 scheme="redis",
@@ -57,7 +57,7 @@ class RabbitMQSettings(BaseSettings, env_prefix="rabbitmq_"):
     port: int
 
     @property
-    def url(self) -> AmqpDsn:
+    def url(self) -> str:
         return str(
             AmqpDsn.build(
                 scheme="amqp",
