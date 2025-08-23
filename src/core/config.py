@@ -20,14 +20,16 @@ class DBSettings(BaseSettings, env_prefix="db_"):
     port: int
 
     @property
-    def url(self) -> PostgresDsn:
-        return PostgresDsn.build(
-            scheme="postgresql+psycopg",
-            username=self.user,
-            password=self.password,
-            host=self.host,
-            port=self.port,
-            path=f"{self.name}",
+    def url(self) -> str:
+        return str(
+            PostgresDsn.build(
+                scheme="postgresql+psycopg",
+                username=self.user,
+                password=self.password,
+                host=self.host,
+                port=self.port,
+                path=f"{self.name}",
+            )
         )
 
 
