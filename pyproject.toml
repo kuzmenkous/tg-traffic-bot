@@ -1,0 +1,74 @@
+[project]
+name = "traffic-bot"
+version = "0.1.0"
+description = "Telegram traffic bot"
+authors = []
+readme = "README.md"
+requires-python = ">=3.13,<4.0"
+dependencies = [
+    "aiogram (>=3.22.0,<4.0.0)",
+    "sqlalchemy (>=2.0.43,<3.0.0)",
+    "greenlet (>=3.2.4,<4.0.0)",
+    "psycopg[binary,pool] (>=3.2.9,<4.0.0)",
+    "alembic (>=1.16.4,<2.0.0)",
+    "alembic-postgresql-enum (>=1.8.0,<2.0.0)",
+    "redis (>=6.4.0,<7.0.0)",
+    "pydantic (>=2.11.7,<3.0.0)",
+    "pydantic-settings (>=2.10.1,<3.0.0)",
+    "celery (>=5.5.3,<6.0.0)",
+    "pre-commit (>=4.3.0,<5.0.0)",
+    "mypy (>=1.17.1,<2.0.0)",
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+# ============================================================================
+# Linters section
+
+[tool.ruff]
+target-version = "py313"
+line-length = 79
+fix = true
+show-fixes = true
+output-format = "concise"
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "ANN",  # Checked by mypy
+    "FBT",
+    "EM",
+    "D100", "D101", "D102", "D103", "D104", "D105", "D106", "D107", "D203",
+    "TD002", "TD003",
+    "FIX002",
+    "TRY003",
+    "RUF001", "RUF002", "RUF003",
+    "PLC0414",
+    "COM812",
+    "UP040",
+    "PLR0913",
+    "TID252",
+    "B904",
+    "N818",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.black]
+line-length = 79
+skip-magic-trailing-comma = true
+
+[tool.mypy]
+strict = true
+plugins = ["pydantic.mypy"]
+
+[tool.importlinter]
+root_package = "src"
+include_external_packages = true
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.17.1"
