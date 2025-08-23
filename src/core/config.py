@@ -40,11 +40,13 @@ class RedisSettings(BaseSettings, env_prefix="redis_"):
 
     @property
     def url(self) -> RedisDsn:
-        return RedisDsn.build(
-            scheme="redis",
-            host=self.host,
-            port=self.port,
-            password=self.password,
+        return str(
+            RedisDsn.build(
+                scheme="redis",
+                host=self.host,
+                port=self.port,
+                password=self.password,
+            )
         )
 
 
@@ -56,12 +58,14 @@ class RabbitMQSettings(BaseSettings, env_prefix="rabbitmq_"):
 
     @property
     def url(self) -> AmqpDsn:
-        return AmqpDsn.build(
-            scheme="amqp",
-            username=self.user,
-            password=self.password,
-            host=self.host,
-            port=self.port,
+        return str(
+            AmqpDsn.build(
+                scheme="amqp",
+                username=self.user,
+                password=self.password,
+                host=self.host,
+                port=self.port,
+            )
         )
 
 
