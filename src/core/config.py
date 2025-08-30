@@ -9,6 +9,7 @@ from .pydantic_types import TimezoneInfo
 
 
 class BotSettings(BaseSettings, env_prefix="bot_"):
+    name: str
     admin_id: int
     token: str
 
