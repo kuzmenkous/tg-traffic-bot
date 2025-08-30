@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from typing import Any
 
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
@@ -11,28 +12,28 @@ log = logging.getLogger(__name__)
 
 
 class BotsManager:
-    def __init__(self):
-        self.tasks: dict[str, asyncio.Task] = {}
+    def __init__(self) -> None:
+        self.tasks: dict[str, asyncio.Task[Any]] = {}
         self.dispatchers: dict[str, Dispatcher] = {}
         self.bots: dict[str, Bot] = {}
 
-    def setup_dispatcher(self, dp: Dispatcher):
+    def setup_dispatcher(self, dp: Dispatcher) -> None:
         @dp.message(Command("start"))
-        async def start_handler(message: types.Message):
+        async def start_handler(message: types.Message) -> None:
             bot = message.bot
-            me = await bot.me()
+            me = await bot.me()  # type: ignore[union-attr]
             await message.answer(f"Hello from bot @{me.username}!")
 
         @dp.message(Command("help"))
-        async def help_handler(message: types.Message):
+        async def help_handler(message: types.Message) -> None:
             await message.answer("This is a help message.")
 
         @dp.message(Command("my_id"))
-        async def my_id_handler(message: types.Message):
-            await message.answer(f"Your ID is {message.from_user.id}")
+        async def my_id_handler(message: types.Message) -> None:
+            await message.answer(f"Your ID is {message.from_user.id}")  # type: ignore[union-attr]
 
         @dp.my_chat_member()
-        async def chat_member_handler(event: types.ChatMemberUpdated):
+        async def chat_member_handler(event: types.ChatMemberUpdated) -> None:
             chat = event.chat
             new_status = event.new_chat_member.status
             old_status = event.old_chat_member.status
@@ -42,7 +43,7 @@ class BotsManager:
                     old_status in ("left", "kicked")
                     and new_status == "administrator"
                 ):
-                    bot = await event.bot.get_me()
+                    bot = await event.bot.get_me()  # type: ignore[union-attr]
                     await main_bot.send_message(
                         event.from_user.id,
                         escape_markdown(
@@ -53,7 +54,7 @@ class BotsManager:
                         ),
                     )
                 elif new_status == "left":
-                    bot = await event.bot.get_me()
+                    bot = await event.bot.get_me()  # type: ignore[union-attr]
                     await main_bot.send_message(
                         event.from_user.id,
                         escape_markdown(
@@ -64,7 +65,7 @@ class BotsManager:
                         ),
                     )
 
-    async def start_bot(self, token: str):
+    async def start_bot(self, token: str) -> None:
         if token not in self.tasks:
             bot = Bot(token)
             dp = Dispatcher()
@@ -76,9 +77,9 @@ class BotsManager:
             task = asyncio.create_task(dp.start_polling(bot))
             self.tasks[token] = task
         else:
-            self.stop_bot(token)
+            await self.stop_bot(token)
 
-    async def stop_bot(self, token: str):
+    async def stop_bot(self, token: str) -> None:
         if token in self.tasks:
             # cancel polling
             self.tasks[token].cancel()
