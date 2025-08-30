@@ -1,20 +1,26 @@
 from .base import BaseCustomException
 
 
-class DotenvException(BaseCustomException):
+class DotenvBaseException(BaseCustomException):
     pass
 
 
-class DotenvListException(DotenvException):
-    error = "Could not parse list from environment variable"
+class DotenvListException(DotenvBaseException):
+    def __init__(self) -> None:
+        super().__init__(
+            message="Could not parse list from environment variable"
+        )
 
 
-class DotenvStrokeException(DotenvException):
-    error = "Could not parse stroke from environment variable"
+class DotenvStrokeException(DotenvBaseException):
+    def __init__(self) -> None:
+        super().__init__(
+            message="Could not parse stroke from environment variable"
+        )
 
 
-class DotenvLoadException(DotenvException):
-    error = "Could not load environment file {env_file}"
-
-    def __init__(self, env_file: str):
-        super().__init__(self.error.format(env_file=env_file))
+class DotenvLoadException(DotenvBaseException):
+    def __init__(self, filepath: str) -> None:
+        super().__init__(
+            message=f"Could not load .env file from path: {filepath}"
+        )
