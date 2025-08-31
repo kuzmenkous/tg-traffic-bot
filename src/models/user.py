@@ -1,14 +1,13 @@
-from sqlalchemy import BIGINT
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped
 
 from ..core.db.base import BaseModel
+from ..core.db.mixins import TgIdMixin
 from ..enums.user import UserRole
 
 
-class UserModel(BaseModel):
+class UserModel(TgIdMixin, BaseModel):
     __tablename__ = "users"
 
-    tg_id: Mapped[int] = mapped_column(BIGINT, unique=True, index=True)
     role: Mapped[UserRole]
 
     def __str__(self) -> str:
